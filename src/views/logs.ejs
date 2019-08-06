@@ -1,0 +1,55 @@
+<%- include("header.ejs"); %>
+
+
+    <body>
+
+
+	<%- include("menu.ejs"); %>
+
+	<p class="pageTitle">Logs</p>
+
+	<div id="captationFileListDiv" class="centralDiv" >
+		<h1>Captations Logs: </h1>
+	</div>
+
+
+
+
+	</body>
+
+
+
+	<script>
+
+
+		<% captationFileRows.forEach(function(crow, index) { %>
+
+			var captationFileRowStr = "<%= crow %>";
+			var captationFileExplodeRow = captationFileRowStr.split("^^");
+
+			var captationFileName = captationFileExplodeRow[0];
+			var captationDate = captationFileExplodeRow[1];
+			var captationNbRows = captationFileExplodeRow[2];
+
+      var captationFileId = captationFileExplodeRow[3];
+      var captationId = captationFileExplodeRow[4];
+
+			var download = '<a href="/streams/'+captationFileName+'.csv" download><img src="/css/icon/action/downloadIcon.png" style="width:4%"/></a>';
+      var consult = '<a href="/loadCaptationFile/'+captationFileId+'&' + captationId + '&' + captationFileName + '"><img src="/css/icon/action/play.png" style="width:4%"/></a>';
+
+			$("#captationFileListDiv").append("<p><b>File Name:</b> " + captationFileName + " " + download + " " + consult + "</p>");
+			$("#captationFileListDiv").append("<p><b>Date:</b> "+ captationDate + "</p>");
+			$("#captationFileListDiv").append("<p><b>Nb of rows:</b> " + captationNbRows + "</p>");
+
+
+		 <% }); %>
+
+
+
+
+	</script>
+
+
+
+
+</html>

@@ -1,0 +1,17 @@
+#registerForm{
+
+  position:absolute;
+  top:28%;
+  right:30%;
+  width:35%;
+  height:35%;
+  background-color:rgb(251,202,16);
+  border-radius:2%;
+  -webkit-transition: width 2s; /* Safari */
+  transition: width 1s;
+  z-index:13;
+
+  display:none;
+
+
+}

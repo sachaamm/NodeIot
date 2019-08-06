@@ -1,0 +1,101 @@
+<%- include("header.ejs"); %>
+
+
+<body>
+
+	<%- include("menu.ejs"); %>
+
+<div id ="mapContainer">
+
+	<div id='map' class="mapBlock" ></div>
+
+</div>
+
+
+<script>
+mapboxgl.accessToken = 'pk.eyJ1Ijoic2FjaGFhbW0iLCJhIjoiY2pkazNtcGpyMTZ3MzJ5cHJuMWpydHJpbSJ9.oUvBz0W9pS-yH9sxGNyRDQ';
+var map = new mapboxgl.Map({
+    container: 'map',
+	style: 'mapbox://styles/mapbox/satellite-v9',
+	zoom: 16,
+    center: [ 5.342152,43.496317]
+});
+
+var radius = 5;
+var lineWidth = 3;
+
+var color = "#007cbf";
+
+
+map.on('load', function () {
+    // Add a source and layer displaying a point which will be animated in a circle.
+
+	<% missionPoints.forEach(function(point, index) { %>
+
+    map.addSource('point<%= index %>', {
+        "type": "geojson",
+        "data":
+
+		{
+        "type": "Point",
+          <!-- <!-- "coordinates": [<%= point %>] --> -->
+         "coordinates": [<%= point %>]
+		}
+
+    });
+
+	<% }); %>
+
+
+
+	<% missionPoints.forEach(function(point, index) { %>
+
+    map.addLayer({
+        "id": "point<%= index %>",
+        "source": "point<%= index %>",
+        "type": "circle",
+        "paint": {
+            "circle-radius": radius,
+            "circle-color": color
+        }
+    });
+
+	<% }); %>
+
+
+	 map.addLayer({
+        "id": "route",
+        "type": "line",
+        "source": {
+            "type": "geojson",
+            "data": {
+                "type": "Feature",
+                "properties": {},
+                "geometry": {
+                    "type": "LineString",
+                    "coordinates": [
+						<% missionPoints.forEach(function(point, index) { %>
+
+							[<%= point %>],
+
+						<% }); %>
+                    ]
+                }
+            }
+        },
+        "layout": {
+            "line-join": "round",
+            "line-cap": "round"
+        },
+        "paint": {
+            "line-color": color ,
+            "line-width": lineWidth
+        }
+    });
+
+
+});
+</script>
+
+</body>
+</html>

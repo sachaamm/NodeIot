@@ -1,0 +1,58 @@
+<%- include("../header.ejs"); %>
+
+
+  <body>
+
+
+	<%- include("../menu.ejs"); %>
+
+	<p class="pageTitle">Error</p>
+
+
+
+
+	<div class="centralDiv">
+
+    <h2>Erreur !</h2>
+
+    <p>Une erreur a ete renvoyee.
+
+    <% if(arg == "unknown_user"){ %>
+
+      <em>Utilisateur inconnu</em>
+
+    <% } %>
+
+
+    <% if(arg == "wrong_password"){ %>
+
+      <em>Mauvais mot de passe pour cet utilisateur.</em>
+
+    <% } %>
+
+
+    <% if(arg == "register_fail"){ %>
+
+      <em>L'inscription a echouee.</em>
+
+    <% } %>
+
+    </br>
+
+    <a href="/">Cliquez ici</a> pour revenir a l'accueil
+    </p>
+
+	</div>
+
+
+
+
+
+</body>
+
+
+
+
+
+
+</html>

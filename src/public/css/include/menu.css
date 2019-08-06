@@ -1,0 +1,83 @@
+/* IMG - menu.ejs */
+.menuIcon{
+
+	margin-right:3%;
+	transition: width 2s;
+}
+
+/* UL - menu.ejs */
+#menu{
+
+	position:absolute;
+	top:11%;
+	left:10%;
+
+}
+
+
+/* IMG - newSensor.ejs / captation.ejs */
+.addIcon{
+
+	position:absolute;
+	top:30%;
+	left:15%;
+	width: 3%;
+}
+
+
+/* SPAN - black & white Tooltip text - captations.ejs / menu.ejs / */
+.insertInfo {
+
+	display:none;
+  width: 8%;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+	position:absolute;
+
+}
+
+
+/* INPUT:SUBMIT - newSensor.ejs / captation.ejs / */
+.submitLink{
+
+	background-color:black;
+	color:white;
+	padding:1%;
+	font-size:1vw;
+
+}
+
+.removeIcon{
+
+	position:absolute;
+	top:2%;
+	right:2%;
+	width:4%;
+	cursor:pointer;
+
+}
+
+#profileIcon{
+
+	position:absolute;
+	top:2%;
+	right:2%;
+	width:4%;
+	cursor:pointer;
+
+}
+
+/* IMG - main.ejs */
+.beeyondLogoBlack{
+
+	width:40%;
+	position:absolute;
+	top:70%;
+	right:30%;
+	z-index:2;
+	cursor:pointer;
+
+}

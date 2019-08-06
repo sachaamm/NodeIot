@@ -1,0 +1,78 @@
+<%- include("header.ejs"); %>
+
+
+    <body>
+
+
+	<%- include("menu.ejs"); %>
+
+	<p class="pageTitle">Sensors</p>
+
+
+	<div id="sensorListDiv" class="centralDiv" >
+		<h1>Sensors: </h1>
+	</div>
+
+
+    <a class="insertLink" href="<%= baseUrl%>:<%=expressPort %>/newSensor">
+
+		
+		<img class="addIcon" src="/css/icon/plus.png">
+
+	</a>
+
+
+
+
+	</body>
+
+
+
+	<script>
+
+
+	  <% sensorRows.forEach(function(row, index) { %>
+
+			var rowStr = "<%= row %>";
+			var explodeRow = rowStr.split("^^");
+
+			var sensorName = explodeRow[0];
+			var sensorPalette = explodeRow[1];
+			var sensorValues = explodeRow[2];
+			var sensorUnits = explodeRow[3];
+
+			var sensorValuesJoined = sensorValues.split("***").join(" / ");
+			var sensorUnitsJoined = sensorUnits.split("***").join(" / ");
+
+			$("#sensorListDiv").append("<p><b>Sensor :</b> "+sensorName+"</p>");
+			//$("#sensorListDiv").append("<p>Palette: "+sensorPalette+"</p>");
+			$("#sensorListDiv").append("<p><b>Values :</b> "+sensorValuesJoined+"</p>");
+			$("#sensorListDiv").append("<p><b>Units :</b> "+sensorUnitsJoined+"</p>");
+
+
+
+		 <% }); %>
+
+
+		$(".addIcon").mouseover(function(){
+
+			// arg, elem , point
+			displayInfo(true,$(".insertInfo"),$(this)[0]);
+
+		});
+
+		$(".addIcon").mouseout(function(){
+
+			// arg, elem , point
+			displayInfo(false,$(".insertInfo"),$(this)[0]);
+
+		});
+
+
+
+	</script>
+
+
+
+
+</html>

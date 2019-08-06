@@ -1,0 +1,139 @@
+<%- include("header.ejs"); %>
+
+
+    <body>
+	
+
+	<%- include("menu.ejs"); %>
+
+
+	
+	
+	
+		<div>
+		
+		<!--<h2> Data Visualizer</h2>
+
+		<h3> Main </h3>-->
+		</BR>
+		</BR>
+		</BR>
+		</BR>
+		</BR>
+		</BR>
+		</BR>
+		</BR>
+		</BR>
+		</BR>
+		</BR>
+		</BR>
+		
+		
+		<a href="<%= baseUrl%>:<%=expressPort %>/newSensor"><p>Add new sensor</p></a>
+		<a href="<%= baseUrl%>:<%=expressPort %>/newCaptation"><p>Add new captation template</p></a>
+      
+	  <div id="sensorListDiv" style="position:absolute;top:20%;left:10%">
+	  <h1>Sensors: </h1>
+	  </div>
+ 
+      <div id="captationListDiv" style="position:absolute;top:20%;left:40%">
+	   <h1>Captations Models: </h1>
+	  </div>
+	  
+	     <div id="captationFileListDiv" style="position:absolute;top:20%;left:70%"> 
+	   <h1>Captations Files: </h1>
+	  </div>
+	
+	</body>
+	
+	
+	
+	<script>
+	
+	
+	  <% sensorRows.forEach(function(row, index) { %>
+			
+			var rowStr = "<%= row %>";
+			var explodeRow = rowStr.split("^^");
+			
+			var sensorName = explodeRow[0];
+			var sensorPalette = explodeRow[1];
+			var sensorValues = explodeRow[2];
+			var sensorUnits = explodeRow[3];
+			
+			var sensorValuesJoined = sensorValues.split("***").join(" / ");
+			var sensorUnitsJoined = sensorUnits.split("***").join(" / ");
+			
+			$("#sensorListDiv").append("<p><b>Sensor:</b> "+sensorName+"</p>");
+			//$("#sensorListDiv").append("<p>Palette: "+sensorPalette+"</p>");
+			$("#sensorListDiv").append("<p><b>Values:</b> "+sensorValuesJoined+"</p>");
+			$("#sensorListDiv").append("<p><b>Units:</b> "+sensorUnitsJoined+"</p>");
+			
+			
+			
+		 <% }); %>
+		 
+		 
+		 <% captationRows.forEach(function(crow, index) { %>
+			
+			var captationRowStr = "<%= crow %>";
+			var captationExplodeRow = captationRowStr.split("^^");
+			
+			var captationName = captationExplodeRow[0] + " <em>( " + captationExplodeRow[1] + " )</em> ";
+			var captationProtocol = captationExplodeRow[1];
+			var captationPort = captationExplodeRow[2];
+			var captationAdditionalProtocolInfo = captationExplodeRow[3];
+			
+			//var sensorValuesJoined = sensorValues.split("***").join(" / ");
+			//var sensorUnitsJoined = sensorUnits.split("***").join(" / ");
+			
+			var iconW = 3;
+			
+			$("#captationListDiv").append("<p><b>Captation:</b> "+captationName+"</p>");
+			$("#captationistDiv").append("<p>Protocol: "+captationProtocol+"</p>");
+			$("#captationListDiv").append("<p><b>Port:</b> "+captationPort+"</p>");
+			$("#captationListDiv").append("<p><b>Additional Info:</b> "+captationAdditionalProtocolInfo+"</p>");
+			$("#captationListDiv").append("<a href='<%= baseUrl%>:<%=expressPort %>/editCaptation/<%= captationIds[index] %>'><img src='/icon/edit.png' style='width:" + iconW + "%'/></a>");
+			$("#captationListDiv").append("<a href='<%= baseUrl%>:<%=expressPort %>/executeCaptation/<%= captationIds[index] %>'><img src='/icon/play.png' style='width:" + iconW + "%'/></a>");
+			
+			
+			
+		 <% }); %>
+		
+		
+		
+		<% captationFileRows.forEach(function(crow, index) { %>
+			
+			var captationFileRowStr = "<%= crow %>";
+			var captationFileExplodeRow = captationFileRowStr.split("^^");
+			
+			var captationFileName = captationFileExplodeRow[0];
+			var captationDate = captationFileExplodeRow[1];
+			var captationNbRows = captationFileExplodeRow[2];
+			//var captationAdditionalProtocolInfo = captationExplodeRow[3];
+			
+			//var sensorValuesJoined = sensorValues.split("***").join(" / ");
+			//var sensorUnitsJoined = sensorUnits.split("***").join(" / ");
+			
+			//var iconW = 3;
+			
+			
+			
+			
+			$("#captationFileListDiv").append("<p><b>File Name:</b> "+captationFileName+"</p>");
+			$("#captationFileListDiv").append("<p>Date: "+captationDate+"</p>");
+			$("#captationFileListDiv").append("<p><b>Nb of rows:</b> "+captationNbRows+"</p>");
+			//$("#captationListDiv").append("<p><b>s Info:</b> "+captationAdditionalProtocolInfo+"</p>");
+			//$("#captationListDiv").append("<a href='<%= baseUrl%>:<%=expressPort %>/editCaptation/<%= captationFileIds[index] %>'><img src='/icon/edit.png' style='width:"+iconW+"%'/></a>");
+			//$("#captationListDiv").append("<a href='<%= baseUrl%>:<%=expressPort %>/executeCaptation/<%= captationFileIds[index] %>'><img src='/icon/play.png' style='width:"+iconW+"%'/></a>");
+			
+			
+			
+		 <% }); %>
+	
+	</script>
+	
+	
+	
+	
+</html>

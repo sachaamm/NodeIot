@@ -1,0 +1,87 @@
+<%- include("header.ejs"); %>
+
+
+    <body>
+
+
+	<%- include("menu.ejs"); %>
+
+	<p class="pageTitle">Captations</p>
+
+		<div id="captationListDiv" class="centralDiv" >
+			<h1>Captations: </h1>
+		</div>
+
+
+    <a href="<%= baseUrl%>:<%=expressPort %>/captation/create&0">
+
+
+		<img class="addIcon" src="/css/icon/plus.png">
+
+	</a>
+
+
+	</body>
+
+
+
+	<script>
+
+
+	   <% captationRows.forEach(function(crow, index) { %>
+
+			var captationRowStr = "<%= crow %>";
+			var captationExplodeRow = captationRowStr.split("^^");
+
+			var captationName = captationExplodeRow[0] + " <em>( " + captationExplodeRow[1] + " )</em> ";
+			var captationProtocol = captationExplodeRow[1];
+			var captationPort = captationExplodeRow[2];
+			var captationAdditionalProtocolInfo = captationExplodeRow[3];
+
+
+			var iconW = 3;
+
+			$("#captationListDiv").append("<p><b>Captation:</b> "+captationName+" ( Id : <b><%= captationIds[index] %></b> )</p>");
+			$("#captationistDiv").append("<p>Protocol: "+captationProtocol+"</p>");
+			$("#captationListDiv").append("<p><b>Port:</b> "+captationPort+"</p>");
+			$("#captationListDiv").append("<p><b>Additional Info:</b> "+captationAdditionalProtocolInfo+"</p>");
+			$("#captationListDiv").append("<a href='<%= baseUrl%>:<%=expressPort %>/captation/edit&<%= captationIds[index] %>'><img src='/css/icon/action/edit.png' style='width:" + iconW + "%'/></a>");
+			$("#captationListDiv").append("<a href='<%= baseUrl%>:<%=expressPort %>/executeCaptation/<%= captationIds[index] %>'><img src='/css/icon/action/play.png' style='width:" + iconW + "%'/></a>");
+
+
+		 <% }); %>
+
+		 $(".addIcon").mouseover(function(){
+
+			// arg, elem , point
+			displayInfo(true,$(".insertInfo"),$(this)[0],"Insert Captation");
+
+		});
+
+		$(".addIcon").mouseout(function(){
+
+			// arg, elem , point
+			displayInfo(false,$(".insertInfo"),$(this)[0],"Insert Captation");
+
+		});
+
+
+
+	</script>
+
+
+  <script>
+
+    $(".rightInfoTitle").html("<em>Captations</em>");
+
+    var repositroyUrl = 'https://bitbucket.org/sachaamm/beeyond-datastreamer';
+    var infoText = "Sur cette page, vous pouvez voir la liste des templates de captations. </br></br><center><img src='/css/icon/logo/bitbucketLogo.png' style='width:30%' /></center>";
+    infoText += " Plus d'informations sur ";
+    infoText += " <a href='" + repositroyUrl + "' target='_blank'><b>https://bitbucket.org/sachaamm/beeyond-datastreamer</b></a>";
+
+    $(".rightInfoField").html( infoText );
+
+  </script>
+
+
+</html>

@@ -1,0 +1,56 @@
+
+#rightInfoForm{
+
+  position:absolute;
+  top:25%;
+  right:0%;
+  width:3%;
+  height:50%;
+  background-color:rgb(251,202,16);
+  border-radius:2%;
+  -webkit-transition: width 1s; /* Safari */
+  transition: width 1s;
+  z-index:30;
+
+}
+
+.rightInfoField{
+
+  margin-left:0%;
+  display:none;
+
+}
+
+.rightInfoLabel{
+
+  margin-left:0%;
+  font-size:1em;
+  display:none;
+
+}
+
+.rightInfoTitle{
+
+  margin-left:0%;
+  font-size:1.2em;
+  display:none;
+
+}
+
+.rightInfoSumbit{
+
+  margin-left:0%;
+  background-color:black;
+  color:white;
+  padding:1%;
+  display:none;
+
+}
+
+.rightInfoContainer{
+
+  width:100%;
+  height:100%;
+
+
+}

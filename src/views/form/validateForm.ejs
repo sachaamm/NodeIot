@@ -1,0 +1,50 @@
+<%- include("../header.ejs"); %>
+
+
+  <body>
+
+
+	<%- include("../menu.ejs"); %>
+
+	<p class="pageTitle">Validate <%= arg %></p>
+
+
+
+
+	<div class="centralDiv">
+
+    <h2>Succes !</h2>
+
+    <p>
+
+    <% if(arg == "newsletterSubscription"){ %>
+
+      Merci pour <em>votre Inscription a la Newsletter, </em>nous vous remercions de votre interet pour <b>le projet Beeyond</b>.
+
+    <% } %>
+
+    <% if(arg == "validate_login"){ %>
+
+      Vous etes maintenant connectes, avec un statut de <b><%= statut %></b>.
+
+    <% } %>
+
+    </br>
+
+    <a href="/">Cliquez ici</a> pour revenir a l'accueil
+    </p>
+
+	</div>
+
+
+
+
+
+</body>
+
+
+
+
+
+
+</html>

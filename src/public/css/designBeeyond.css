@@ -1,0 +1,66 @@
+
+
+@font-face {
+
+   font-family: sansation;
+   src: url(font/Sansation_Regular.ttf);
+
+}
+
+@font-face {
+
+   font-family: logo;
+   src: url(font/Individigital_Demibold.ttf);
+
+}
+
+/* SPACING */
+br{	height:5vw;	display: inline-block; }
+
+
+/* TEXT AND TITLE */
+p{	 font-size:0.8vw;		}
+h1{	 font-size:1.9vw;     }
+h2{	 font-size:1.7vw;   }
+h3{	 font-size:1.5vw;   }
+h4{  font-size:1.3vw;    }
+
+
+/* LINK AND TEXT-DECORATION */
+a{	font-size:0.7vw;	}
+strong{ 	font-size:3vw;     }
+
+
+/* FORM */
+option{	font-size:1vw; }
+label{	font-size:0.5vw; }
+select{	font-size:1vw;	  }
+textarea {  width: 1000px;  height: 150px; }
+
+
+/* MENU */
+span{	font-size:0.5vw;  }
+li{ 	font-size:0.8vw;	text-align:center;  }
+ul{ 	font-size:0.8vw;	list-style-type:none;	transition: color 1s background-color 1s;  }
+menu{	width:100%;  }
+menuitem{	font-size:3.5vw;	width:15%;  }
+
+
+/* TABLE */
+thead{  width: 10em;  }
+tbody{	width: 10em;  }
+table{	width:80%;  }
+tr{	    font-size:3.7vw;  }
+td{ 	font-size:4.7vw;  }
+
+
+/* IFRAME */
+iframe{    overflow:hidden; }
+
+*{
+font-family: sansation;
+}
+
+
+html, body {  margin: 0; height: 100%; overflow: hidden; margin:0; }
+body{   padding:0;  }

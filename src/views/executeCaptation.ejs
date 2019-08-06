@@ -1,0 +1,122 @@
+<%- include("header.ejs"); %>
+
+<body>
+
+	<%- include("menu.ejs"); %>
+
+
+	<!-- SOCKET IO -->
+	<script src="<%= baseUrl%>:<%=socketIOPort %>/socket.io/socket.io.js"></script>
+
+
+	<%- include("captation/component/graphBlock.ejs"); %>
+
+
+	<% if( gpsAssisted == "on"){ %>
+
+		<%- include("captation/component/map.ejs"); %>
+
+	<% } %>
+
+
+
+	<%- include("captation/component/logDescription.ejs"); %>
+
+
+
+
+
+
+<%- include("captation/js/graphVisualisation.ejs"); %>
+<%- include("captation/js/mapVisualisation.ejs"); %>
+
+
+<script>
+
+	// graphVisualisation
+	// mapVisualisation
+
+
+	/////////////////////////////
+	// SOCKET IO ----- for REAL TIME graph
+	/////////////////////////////
+
+
+	var socket = io.connect('<%= baseUrl%>:<%=socketIOPort %>');
+
+	console.log("SEND ON port <%=socketIOPort %>");
+	socket.emit('startCaptation', "apiKey_<%= captationId %>"); // ASK THE CAPTATION TO START
+
+
+	socket.on('communicateClientId', function(clientId) {
+
+		console.log('Receive Client Id : ' + clientId);
+
+		console.log("client ID val " + $("#clientId").val() );
+
+		$("#clientId").val(clientId);
+
+
+
+		openListening(clientId);
+
+	});
+
+
+	function openListening(clientId){ // ON CLIENT ID RECEIVED , OPEN LISTENING
+
+		console.log("OPEN LISTENING WITH CLIENT ID " + clientId);
+
+		socket.on('receiveCaptation' + clientId, function(captationValue) {
+
+			console.log('Receive Captation Data : ' + captationValue);
+			console.log("captation Value lg " + captationValue.length);
+
+			updateGraph(captationValue);
+
+		});
+
+
+		<% if (gpsAssisted == "on" && captationId != 7) { %> // CAPTATION #7 = GPS CAPTATION
+
+
+			// SI GPS ASSISTED ON RECOIT AUSSI RECEIVE CAPTATION
+			socket.on('receiveCaptation7', function(captationValue) {
+
+				console.log('Receive Captation GPS Data : ' + captationValue);
+				console.log("captation Value lg " + captationValue.length);
+
+
+				//updateGraph(captationValue);
+				addMissionPoint(captationValue[1],captationValue[0]);
+
+
+			});
+
+
+		<% } %>
+
+
+
+	}
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>

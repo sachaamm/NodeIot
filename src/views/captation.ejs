@@ -1,0 +1,287 @@
+
+	<%- include("header.ejs"); %>
+
+    <body>
+
+	<%- include("menu.ejs"); %>
+
+
+		<div class="centralDiv">
+
+		<% if (mode == "edit") { %>
+
+			<form action='<%= baseUrl%>:<%=expressPort %>/updateCaptation/<%= captationId %>' id="sensorForm" method='post' encType="multipart/form-data">
+
+				<h4>Edit captation: </h4>
+
+		<% } %>
+
+
+		<% if (mode == "create") { %>
+
+			<form action='<%= baseUrl%>:<%=expressPort %>/createCaptation' id="sensorForm" method='post' encType="multipart/form-data">
+
+				<h4>New captation: (<%=mode %>) </h4>
+
+		<% } %>
+
+
+				<label for="captationName">Captation Name : </label></br>
+				<input name="captationName" id="captationName" type="text" placeholder="Ex: DHT11 Captation" value="<%= name %>">
+				</br>
+
+
+				<!-- SENSOR -->
+				<div id="sensorsDiv">
+
+					<label for="sensor">Sensor : </label></br>
+
+					 <select class="sensor" name="sensor0" id="sensor0">
+
+					<% sensors.forEach(function(sensor, index) { %>
+
+						<option value="<%= sensor %>"><%= sensor %></option>
+
+					<% }); %>
+
+				</select>
+
+				</br>
+
+			</div>
+
+
+				<!-- PROTOCOL -->
+				<label for="numberOfValues">Protocol : </label></br>
+
+				<select name="protocol" id="protocol" value="<%=protocol %>">
+
+					<% protocols.forEach(function(protocol, index) { %>
+
+						<option value="<%= protocol %>"><%= protocol %></option>
+
+					<% }); %>
+
+				</select>
+
+				</br>
+
+				<!-- PORT -->
+				<div id="portDiv">
+
+					<label for="port">Port : </label></br>
+					<input id="port" name="port" type="text" placeholder="Ex: COM5 / 41234 etc" value="<%=port %>" >
+					</br>
+
+				</div>
+
+
+				</br>
+				</br>
+				<!-- BAUDRATE -->
+				<div id="baudrateDiv">
+
+					<label for="additionalInfo" id="additionalInfoLabel">Baudrate : </label></br>
+					<input id="additionalInfo" name="additionalInfo" type="text" placeholder="Ex: 115200 etc" value="<%=additionalProtocolInfo %>">
+					</br>
+
+				</div>
+
+
+				</br>
+				</br>
+
+				<input type="radio" id="gpsAssisted" name="gpsAssisted" />
+				<label for="gpsAssisted">GPS Assisted</label>
+				</br>
+				</br>
+				</br>
+
+				<input type="file" id="arduinoFile" name="arduinoFile" />
+				<label for="arduinoFile">Arduino File :</label>
+				</br>
+				</br>
+				</br>
+
+				<textarea style="display:none" id="content"  name="sensorsNames"></textarea>
+
+
+				<a onclick="submitForm()" class="submitLink" type='submit'>Submit !</a>
+
+			</form>
+
+		</div>
+
+
+
+
+
+
+		<script>
+
+			//var nbOfSensors = 1;
+
+
+			$("select[name*='protocol']").change(function(){
+
+				var protocol = $(this).val();
+				$("#port").val("");
+
+
+				if(isAdditionalInfoRequiredProtocol(protocol)){
+
+					setVisibility($("#baudrateDiv"),true);
+
+					$("#additionalInfoLabel").text(getAdditionalLabel(protocol));
+
+
+				}else{
+
+
+					setVisibility($("#baudrateDiv"),false);
+
+				}
+
+
+				if(isPortRequiredProtocol(protocol)){
+
+					setVisibility($("#portDiv"),true);
+
+				}else{
+
+					setVisibility($("#portDiv"),false);
+
+				}
+
+			});
+
+
+
+			function isAdditionalInfoRequiredProtocol(protocol){
+
+
+					<!-- if(protocol == 'UDP' || protocol == 'Serial')return true; -->
+					if(protocol == 'Serial')return true;
+
+				return false;
+			}
+
+			function getAdditionalLabel(protocol){
+
+				if(protocol == 'Serial')return 'Baudrate';
+				if(protocol == 'UDP')return 'Server IP';
+
+				return '- UNDEFINED - ';
+
+			}
+
+
+
+			function isPortRequiredProtocol(protocol){
+
+				<!-- if(protocol == 'UDP' || protocol == 'Serial')return true; -->
+				if(protocol == 'Serial')return true;
+
+				return false;
+			}
+
+			$("input[name*='numberOfSensors']").change(function(){
+
+				if(nbOfSensors < $("input[name*='numberOfSensors']").val()){
+
+					<!-- alert("ADD"); -->
+					addSensor();
+				}
+
+				/*
+				if(nbOfSensors > $("input[name*='numberOfSensors']").val()){
+
+					//alert("REMOVE LAST");
+
+				}
+				*/
+
+			nbOfSensors = $("input[name*='numberOfSensors']").val();
+
+
+			});
+
+			function addSensor(){
+
+
+				var newValueId = $(".sensor").length;
+				var newValue=''+
+				'<select class="sensor" name="sensor'+newValueId+'" id="sensor'+newValueId+'">'+
+
+				<% sensors.forEach(function(sensor, index) { %>
+
+				'<option value="<%= sensor %>"><%= sensor %></option>'+
+
+				<% }); %>
+				'</select></br>';
+
+
+				$("#sensorsDiv").append(newValue);
+
+			}
+
+			function submitForm(){
+
+				var sensorsNames = [];
+
+				var delimiterA = ">>";
+				var delimiterB = "##";
+				var validInput = true;
+
+				var protocol = $("#protocol").val();
+				var portName = $("#port").val();
+				var captationName = $("#captationName").val();
+
+				if(captationName.length == 0){
+
+					validInput = false;
+					alert("You must specify a name for your captation !");
+
+				}
+
+				if(isPortRequiredProtocol(protocol) && portName.length == 0){
+
+					validInput = false;
+					alert("You must specify a port name with this protocol ! ("+protocol+")");
+				}
+
+
+
+
+				if(!validInput)return;
+
+				$(".sensor").each(function (){
+
+					sensorsNames.push($(this).val());
+
+				});
+
+
+
+				var contentString = "";
+
+				for(var i = 0 ; i < sensorsNames.length ; i++){
+
+					contentString += sensorsNames[i] + delimiterB;
+
+				}
+
+
+				$("#content").val( contentString );
+
+				if(validInput)$("#sensorForm").submit();
+
+
+			}
+
+
+
+		</script>
+
+
+	</body>

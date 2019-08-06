@@ -1,0 +1,304 @@
+
+<a href="<%= baseUrl%>:<%=expressPort %>"><img id="logoImg" src="/beeyondLogo.png" style="width:4%"></a>
+<a href="<%= baseUrl%>:<%=expressPort %>"><h1 id="logo"> NodeIoT</h1></a>
+
+<ul id="menu">
+
+	<a href="<%= baseUrl%>:<%=expressPort %>/sensors"><img id="sensorIcon" class="menuIcon" style="width:4%" src="/css/icon/sensorIcon.png"/></a>
+	<a href="<%= baseUrl%>:<%=expressPort %>/captations"><img id="captationIcon" class="menuIcon" style="width:4%" src="/css/icon/captationIcon.png"/></a>
+	<a href="<%= baseUrl%>:<%=expressPort %>/logs"><img id="logIcon" class="menuIcon" style="width:4%" src="/css/icon/logIcon.png"/></a>
+
+	
+</ul>
+
+<div id="menuDiv">
+	<img src="/css/icon/profileIcon.png" id="profileIcon"/>
+</div>
+
+<span class="insertInfo">I'm the Info Span, actually hidden !</span>
+
+<%- include("form/subscriptionNewsletterForm.ejs"); %>
+<%- include("form/registerForm.ejs"); %>
+<%- include("form/loginForm.ejs"); %>
+
+
+<%- include("form/archiveForm.ejs"); %>
+
+
+<%- include("form/rightInfoPanel.ejs"); %>
+
+<!-- Modal structure -->
+<div id="footerDiv"> <!-- data-iziModal-fullscreen="true"  data-iziModal-title="Welcome"  data-iziModal-subtitle="Subtitle"  data-iziModal-icon="icon-home" -->
+    <!-- Modal content -->
+
+		<ul id="footerMenu">
+
+		<a class="footerText" id="newsletterMenu">Newsletter</a>
+		<a class="footerText" id="registerMenu">M'inscrire</a>
+		<a href="<%= baseUrl%>:<%=expressPort %>/archives" class="footerText" id="archivesMenu">Archives</a>
+		<a href="<%= baseUrl%>:<%=expressPort %>/team" class="footerText" id="teamMenu">Team</a>
+		<a href="<%= baseUrl%>:<%=expressPort %>/partenaires" class="footerText" id="PartenairesMenu">Partenaires</a>
+
+		<% if(statut == "admin"){ %>
+		<a class="footerText" id="archiveMenu">Ajouter archive</a>
+		<% } %>
+
+	</ul>
+
+</div>
+
+<!-- Use with NEWSLETTER FORM-->
+<div id="opacityPanel"></div>
+
+<!-- Trigger to open Modal -->
+
+<script src="/jquery/jquery.min1-6-2.js"></script>
+<script src="/jquery/jquery.1-10-2.js"></script>
+<script src="/jquery/jquery.ui1-11-14.js"></script>
+
+
+<script>
+
+// THIS SCRIPT POP UP INFO ON IMG ICON MENU
+$(".menuIcon").mouseover(function(){
+
+	var src = $(this).attr("src");
+	var explodeSrc = src.split(".");
+
+	var removeIconTitle = explodeSrc[0].replace("Icon","");
+	removeIconTitle = removeIconTitle.replace("/css/icon/","");
+
+	displayInfo(true,$(".insertInfo"),$(this)[0],removeIconTitle);
+
+	$(this).attr("src",explodeSrc[0]+"B." + explodeSrc[1]);
+
+
+});
+
+$(".menuIcon").mouseleave(function(){
+
+	var src = $(this).attr("src");
+	var explodeSrc = src.split(".");
+	explodeSrc[0] = explodeSrc[0].substring(0,explodeSrc[0].length-1);
+
+	var removeIconTitle = explodeSrc[0].replace("Icon","");
+	removeIconTitle = removeIconTitle.replace("/css/icon/","");
+
+	displayInfo(false,$(".insertInfo"),$(this)[0],removeIconTitle);
+
+	$(this).attr("src",explodeSrc[0]+"." + explodeSrc[1]);
+
+});
+
+
+
+</script>
+
+
+
+
+
+<script>
+
+	//  THIS IS THE SCRIPT FOR THE RIGHT INFO STRETCHING TRANSITION
+
+  var startWindowWidth = $(window).width();
+  var startWindowHeight = $(window).height();
+
+  var newWSizeRatio = 1;
+  var newHSizeRatio = 1;
+
+  var percentWidths = [3,15];
+  var transitionalWidths = [];
+
+	var element = "#rightInfoForm";
+
+
+  for(var i = 0 ; i < percentWidths.length;i++){
+
+		var ppx = percentToPx(percentWidths[i],'width',1);
+		console.log("ppx " + ppx);
+    transitionalWidths.push(ppx);
+  }
+
+
+    $("#pageActionner").click(function() {
+
+      newWSizeRatio = $(window).width() / startWindowWidth ;
+
+      transitionElement(element,'width',transitionalWidths,newWSizeRatio);
+
+			setNewsletterFormVisibility(parseInt($(element).attr("step")) % 2 == 1);
+
+    }
+
+
+    );
+
+    function setNewsletterFormVisibility(state){
+
+      if(state == true){
+        $(".rightInfoSumbit").fadeIn("slow");
+        $(".rightInfoField").fadeIn("slow");
+        $(".rightInfoLabel").fadeIn("slow");
+        $(".rightInfoTitle").fadeIn("slow");
+
+
+
+      }else{
+        $(".rightInfoSumbit").fadeOut("slow");
+        $(".rightInfoField").fadeOut("slow");
+        $(".rightInfoLabel").fadeOut("slow");
+        $(".rightInfoTitle").fadeOut("slow");
+
+
+
+
+      }
+
+    }
+
+
+
+    $( window ).resize(function() {
+
+      var forceResponsive = false;
+
+      if(forceResponsive){
+
+        var step = parseInt($("#newsletterSubscriptionForm").attr("step"));
+
+        var percentWidth = percentWidths[step % percentWidths.length];
+        console.log("percent width " + percentWidth + " step " + step);
+
+        $(element).css("width",percentWidth+"%");
+
+      }
+
+
+      $("#pageActionner").off();
+      console.log("window resize , page actionner off");
+
+      $("#pageActionner").click(function() {
+        //alert( "Handler for .click() called." );
+        newWSizeRatio = $(window).width() / startWindowHeight ;
+        console.log("new w size ratio " + newWSizeRatio);
+        transitionElement(element,'width',transitionalWidths, newWSizeRatio);
+
+      });
+
+    });
+
+	</script>
+
+
+	<script>
+
+		$(document).ready(function(){
+
+			// NEWSLETTER
+			var newsletterStep = 0;
+
+			$("#newsletterMenu").click(function(){
+				//alert("hey");
+				if(newsletterStep % 2 == 1){
+					$("#newsletterSubscriptionForm").fadeOut("fast");
+					$("#opacityPanel").fadeOut("slow");
+				}else{
+					$("#newsletterSubscriptionForm").fadeIn("fast");
+					$("#opacityPanel").fadeIn("slow");
+				}
+
+				newsletterStep++;
+
+			});
+
+			$("#newsletterSubscriptionRemove").click(function(){
+
+				newsletterStep = 0;
+				$("#newsletterSubscriptionForm").fadeOut("fast");
+				$("#opacityPanel").fadeOut("slow");
+
+			});
+
+			//REGISTER
+			var registerStep = 0;
+
+			$("#registerMenu").click(function(){
+				//alert("hey");
+				if(registerStep % 2 == 1){
+					$("#registerForm").fadeOut("fast");
+					$("#opacityPanel").fadeOut("slow");
+				}else{
+					$("#registerForm").fadeIn("fast");
+					$("#opacityPanel").fadeIn("slow");
+				}
+
+				registerStep++;
+
+			});
+
+			$("#registerFormRemove").click(function(){
+
+				newsletterStep = 0;
+				$("#registerForm").fadeOut("fast");
+				$("#opacityPanel").fadeOut("slow");
+
+			});
+
+			//LOGIN
+			var loginStep = 0;
+
+			$("#profileIcon").click(function(){
+				//alert("hey");
+				if(loginStep % 2 == 1){
+					$("#loginForm").fadeOut("fast");
+					$("#opacityPanel").fadeOut("slow");
+				}else{
+					$("#loginForm").fadeIn("fast");
+					$("#opacityPanel").fadeIn("slow");
+				}
+
+				loginStep++;
+
+			});
+
+			$("#loginFormRemove").click(function(){
+
+				loginStep = 0;
+				$("#loginForm").fadeOut("fast");
+				$("#opacityPanel").fadeOut("slow");
+
+			});
+
+
+			//ARCHIVES
+			var archiveStep = 0;
+
+			$("#archiveMenu").click(function(){
+				//alert("hey");
+				if(archiveStep % 2 == 1){
+					$("#archiveForm").fadeOut("fast");
+					$("#opacityPanel").fadeOut("slow");
+				}else{
+					$("#archiveForm").fadeIn("fast");
+					$("#opacityPanel").fadeIn("slow");
+				}
+
+				archiveStep++;
+
+			});
+
+			$("#archiveFormRemove").click(function(){
+
+				archiveStep = 0;
+				$("#archiveForm").fadeOut("fast");
+				$("#opacityPanel").fadeOut("slow");
+
+			});
+
+});
+
+
+
+</script>

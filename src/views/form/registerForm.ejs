@@ -1,0 +1,31 @@
+<div id="registerFormContainer">
+
+  <form id="registerForm"  method="post" action='<%= baseUrl%>:<%=expressPort %>/register' class="modalForm" step=0>
+
+    <img src="/css/icon/removeIcon.png" id="registerFormRemove" class="removeIcon"/>
+
+    <center>
+    <p class="newsletterSubscriptionTitle"><em>Inscription</em></p>
+    </center>
+
+    <center><label for="pseudo" class="newsletterSubscriptionLabel">Pseudo : </label></center>
+    <center><input class="newsletterSubscriptionField" type="text" name="pseudo"></center>
+    </br>
+
+    <center><label for="mail" class="newsletterSubscriptionLabel">Adresse mail : </label></center>
+    <center><input class="newsletterSubscriptionField" type="text" name="mail"></center>
+    </br>
+
+    <center><label for="password" class="newsletterSubscriptionLabel">Mot de passe : </label></center>
+    <center><input class="newsletterSubscriptionField" type="password" name="password"></center>
+    </br>
+
+    <center><label for="confirmpassword" class="newsletterSubscriptionLabel">Confirmez le mot de passe : </label></center>
+    <center><input class="newsletterSubscriptionField" type="password" name="confirmpassword"></center>
+    </br>
+
+    <center><input class="newsletterSubscriptionSumbit"  type="submit" value="Inscription"></center>
+
+  </form>
+
+</div>

@@ -1,0 +1,58 @@
+
+#newsletterSubscriptionForm{
+
+  position:absolute;
+  top:28%;
+  right:30%;
+  width:35%;
+  height:35%;
+  background-color:rgb(251,202,16);
+  border-radius:2%;
+  -webkit-transition: width 2s; /* Safari */
+  transition: width 1s;
+  z-index:13;
+
+  display:none;
+
+}
+
+.newsletterSubscriptionField{
+
+  margin-left:0%;
+
+
+}
+
+.newsletterSubscriptionLabel{
+
+  margin-left:0%;
+  font-size:1em;
+
+
+}
+
+.newsletterSubscriptionTitle{
+
+  margin-left:0%;
+  font-size:1.2em;
+
+
+}
+
+.newsletterSubscriptionSumbit{
+
+  margin-left:0%;
+  background-color:black;
+  color:white;
+  padding:1%;
+  cursor:pointer;
+
+}
+
+.newsletterSubscriptionContainer{
+
+  width:100%;
+  height:100%;
+
+
+}

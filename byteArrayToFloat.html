@@ -1,0 +1,31 @@
+<script>
+
+
+// THIS CODE FRAGMENT IS SHOWING HOW TO OUTPUT FLOAT VALUE BYTE ARRY CONVERTED THROUGH SERIAL 
+
+// ARDUINO OUTPUT FOR -11.7 : [0] 51 / [1] 51 / [2] 59 / [3] 193
+
+
+
+// Create a buffer
+var buf = new ArrayBuffer(4);
+// Create a 16-bit int view of it
+var ints = new Int8Array(buf);
+// Fill in the values
+ints[0] = 51;
+ints[1] = 51;
+ints[2] = 59;
+ints[3] = 193;
+
+
+
+// Create a 32-bit float view of it
+var floats = new Float32Array(buf);
+// Read the bits as a float; note that by doing this, we're implicitly
+// converting it from a 32-bit float into JavaScript's native 64-bit double
+var num = floats[0];
+// Done
+console.log(num);
+
+
+</script>

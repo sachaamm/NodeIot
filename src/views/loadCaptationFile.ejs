@@ -1,0 +1,65 @@
+<%- include("header.ejs"); %>
+
+<body>
+
+	<%- include("menu.ejs"); %>
+
+
+	<!-- SOCKET IO -->
+	<script src="<%= baseUrl%>:<%=socketIOPort %>/socket.io/socket.io.js"></script>
+
+
+	<%- include("captation/component/graphBlock.ejs"); %>
+
+
+	<% if( gpsAssisted == "on"){ %>
+
+		<%- include("captation/component/map.ejs"); %>
+
+	<% } %>
+
+
+
+<%- include("captation/js/graphVisualisation.ejs"); %>
+
+
+	<%- include("captation/js/mapVisualisation.ejs"); %>
+
+
+
+<script>
+
+	// graphVisualisation
+	// mapVisualisation
+
+
+	/////////////////////////////
+	// SOCKET IO ----- for REAL TIME graph
+	/////////////////////////////
+
+
+	var socket = io.connect('<%= baseUrl%>:<%=socketIOPort %>');
+
+
+
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>

@@ -1,0 +1,16 @@
+
+<!-- THIS IS THE DESCRIPTION LOG , TO PUT A DESCRIPTION IN THE STREAM FILE EXPORT ( only in REAL TIME MODE )-->
+
+<div id="logDescriptionDiv">
+
+<form id="logDescription" action="<%= baseUrl%>:<%=expressPort %>/exportStream" method="post" >
+
+	<textarea id="logDescription" rows="4" cols="50" name="description" placeholder="Describe your captation here..."></textarea>
+
+	<input id="clientId" type="hidden" name="streamClientId" value="" />
+
+	<input id="logDescriptionSubmit" type="submit" value="Export to File" />
+
+</form>
+
+</div>

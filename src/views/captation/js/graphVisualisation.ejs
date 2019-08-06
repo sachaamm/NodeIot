@@ -1,0 +1,287 @@
+<script>
+
+
+// set up our data series with 150 random data points
+var start = false;
+
+var seriesData = [ [], [], [], [], [], [], [], [], [] ]; // LIMITED TO 9 VALUES
+
+//https://github.com/shutterstock/rickshaw#rickshawcolorpalette
+var palette = new Rickshaw.Color.Palette( { scheme: 'spectrum14' } );
+
+let debugGraphJS = false;
+
+// FOREACH VALUE , WE GET A SERIES DATA
+var graph = new Rickshaw.Graph( {
+	element: document.getElementById("chart"),
+	width: 900,
+	height: 500,
+	renderer: 'area',
+	stroke: true,
+	preserve: true,
+
+	series: [
+
+      <% values.forEach(function(value, index) { %>
+			{
+		   	color: palette.color(),
+				data: seriesData[<%= index %>],
+				name: "<%= value %>"
+			},
+
+
+      <% }); %>
+
+
+		<% if (gpsAssisted == "on") { %> // ON AJOUTE L ' ALTITUDE SI GPS
+
+			/*{
+
+		  color: palette.color(),
+			data: seriesData[<%= values.length %>],
+			name: "Altitude"
+			},
+
+			*/
+
+		<% } %>
+
+
+
+	]
+
+
+	} );
+
+
+
+	var valuesLength = 0;
+
+	 <% values.forEach(function(value, index) { %>
+		valuesLength++;
+	 <% }); %>
+
+	//valuesLength--; // DON'T ADD TIME STAMP
+
+	var valuesInStream = 100;
+
+	var up = 0;
+
+
+	// REAL TIME
+	function updateGraph(values){
+
+		// WE EXPECT A NUMBER OF VALUES SENT VIA SOCKET
+		var nbOfValuesExpected = valuesLength;
+
+
+		if(values.length != nbOfValuesExpected){
+
+			console.error("values and valuesLength are not the same length ( " + values.length + " / " + valuesLength+ " )");
+			return;
+
+		}
+
+		// WE MANAGE POORLY ABERRANT VALUES
+		var valueMax = 65533;
+		var errorValue = false;
+		var giveRandomValueInsteadOfError = true; // IN DEBUG CASE , WE GIVE RANDOM VALUES INSTEAD OF ERROR
+
+		for(var i =0;i<values.length;i++){
+
+			if(values[i] >= valueMax){
+				console.error("Out of range data : " + values[i]);
+				errorValue = true;
+
+				if(giveRandomValueInsteadOfError)values[i] = Math.random() * 50; // RANDOM VALUES INSTEAD OF ERROR
+
+			}
+
+
+		}
+
+		if(errorValue && !giveRandomValueInsteadOfError)return; // DON'T UPDATE THE GRAPH WITH ABERRANT VALUES IF ABERRANT VALUE AND !GIVE RANDOM VALUE INSTEAD OF ERROR
+
+
+		<% values.forEach(function(value, index) { %>
+
+			// SHIFT WHEN WE GET SERIES DATA FULL ( WE GET A MAXIMUM NUMBER OF VALUES IN STREAM to AVOID ENDLESS STACK)
+		if(seriesData[<%= index %>].length > valuesInStream){
+
+			var arr = seriesData[<%= index %>]
+			seriesData[<%= index %>].shift();
+			up++;
+
+		}
+
+		seriesData[<%= index %>].push({x:seriesData[<%= index %>].length + up,y:values[<%= index %>]});
+
+		<% }); %>
+
+
+		<% if (gpsAssisted == "on") { %>
+			// THA  ALTITUDE WAS SUPPOSED TO BE ADDED DIRECTLY IN GRAPH, INACTIVE ACTUALLY SO THESES LINES ARE USELESS
+		if(seriesData[<%= values.length %>].length > valuesInStream){
+
+			var arr = seriesData[<%= values.length %>]
+			seriesData[<%= values.length %>].shift();
+			up++;
+
+		}
+
+		
+
+		// PUSH VALUE TO THE GRAPH
+		seriesData[<%= values.length %>].push({x:seriesData[<%= values.length %>].length + up,y:values[<%= values.length + 2 %>]});
+
+		//console.log("GPS LATITUDE : " + values[<%= values.length  %>]  );
+		//console.log("GPS LONGITUDE : " + values[<%= values.length + 1 %>]  );
+
+		<% } %>
+
+
+		graph.update();
+
+		graph.render();
+
+		<% if (mode == "REAL_TIME") { %>
+
+			if(!start){
+
+				buildGraphComponents();
+				start = true;
+
+			}
+
+		<% } %>
+
+
+	}
+
+
+  	// LETS BUILD THE GRAPH COMPONENTS
+  	function buildGraphComponents(){
+
+			console.log("Build Graph components");
+
+  		var preview = new Rickshaw.Graph.RangeSlider( {
+  			graph: graph,
+  			element: document.getElementById('preview'),
+  		} );
+
+  		var hoverDetail = new Rickshaw.Graph.HoverDetail( {
+  			graph: graph,
+  			xFormatter: function(x) {
+  				return new Date(x * 1000).toString();
+  			}
+  		} );
+
+  	var annotator = new Rickshaw.Graph.Annotate( {
+  		graph: graph,
+  		element: document.getElementById('timeline')
+  	} );
+
+  	var legend = new Rickshaw.Graph.Legend( {
+  		graph: graph,
+  		element: document.getElementById('legend')
+  	} );
+
+  	var shelving = new Rickshaw.Graph.Behavior.Series.Toggle( {
+  		graph: graph,
+  		legend: legend
+  	} );
+
+  	var order = new Rickshaw.Graph.Behavior.Series.Order( {
+  		graph: graph,
+  		legend: legend
+  	} );
+
+  	var highlighter = new Rickshaw.Graph.Behavior.Series.Highlight( {
+  		graph: graph,
+  		legend: legend
+  	} );
+
+  	var smoother = new Rickshaw.Graph.Smoother( {
+  		graph: graph,
+  		element: document.querySelector('#smoother')
+  	} );
+
+  	var ticksTreatment = 'glow';
+
+  	var xAxis = new Rickshaw.Graph.Axis.Time( {
+  		graph: graph,
+  		ticksTreatment: ticksTreatment,
+  		timeFixture: new Rickshaw.Fixtures.Time.Local()
+  	} );
+
+  	var yAxis = new Rickshaw.Graph.Axis.Y( {
+  		graph: graph,
+  		tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
+  		ticksTreatment: ticksTreatment
+  	} );
+
+
+  	var controls = new RenderControls( {
+  		element: document.querySelector('form'),
+  		graph: graph
+  	} );
+
+
+
+  }
+
+
+	<% if (mode == "FROM_FILE") { %>
+
+		//buildGraphComponents();
+
+		<% graphLines.forEach(function(graphLine, index) { %>
+
+
+			var graphLine = '<%= graphLine %>';
+		
+			var re = /&quot;/gi;
+			re = /&#34;/gi;
+		
+
+			var ngraphLine = graphLine.replace(re,"");
+
+			var splitNGraph = ngraphLine.split(",");
+
+			console.log("graphLine :");
+			console.log(ngraphLine);
+
+			for(var i = 0 ; i < splitNGraph.length;i++){
+
+				//console.log(splitNGraph[i]);
+				splitNGraph[i] = parseFloat(splitNGraph[i]);
+
+			}
+			//console.log("graphLine " + graphLine);
+			//console.log("ngraphLine " + ngraphLine);
+
+			updateGraph(splitNGraph);
+
+
+		<% }); %>
+
+		buildGraphComponents();
+
+	<% } %>
+
+
+
+	function buildGraphFromStreamFile(){
+
+
+
+	}
+
+
+
+
+
+
+
+
+</script>

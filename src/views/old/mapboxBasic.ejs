@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Display map navigation controls</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:50%; }
+    </style>
+</head>
+<body>
+
+<div style="display:none">
+
+<div id='map'></div>
+
+</div>
+
+
+<script>
+mapboxgl.accessToken = 'pk.eyJ1Ijoic2FjaGFhbW0iLCJhIjoiY2pkazNtcGpyMTZ3MzJ5cHJuMWpydHJpbSJ9.oUvBz0W9pS-yH9sxGNyRDQ';
+var map = new mapboxgl.Map({
+    container: 'map', // container id
+    style: 'mapbox://styles/mapbox/streets-v9',
+    center: [-74.50, 40], // starting position
+    zoom: 9 // starting zoom
+});
+
+// Add zoom and rotation controls to the map.
+map.addControl(new mapboxgl.NavigationControl());
+</script>
+
+</body>
+</html>

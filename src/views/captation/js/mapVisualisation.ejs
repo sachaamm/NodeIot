@@ -1,0 +1,216 @@
+
+
+<script>
+
+
+var missionPoints = [];
+
+var mapLoaded = false;
+
+var geojsonData = null;
+
+
+// Create a GeoJSON source with an empty lineString.
+var geojson = {
+    "type": "FeatureCollection",
+    "features": [{
+        "type": "Feature",
+        "geometry": {
+            "type": "LineString",
+            "coordinates": [
+
+            ]
+        }
+    }]
+};
+
+
+
+
+mapboxgl.accessToken = 'pk.eyJ1Ijoic2FjaGFhbW0iLCJhIjoiY2ppOTN6ejJ4MDhjdjNrcG55Z2V1eDUzcyJ9.X2ahMNmPdLzE9NDDn1TEnA';
+var map = new mapboxgl.Map({
+    container: 'map',
+	style: 'mapbox://styles/mapbox/satellite-v9',
+	zoom: 16,
+    center: [ <%= longitude %>,<%= latitude %>]
+});
+
+var radius = 5;
+var lineWidth = 3;
+
+var color = "#007cbf";
+
+var realTime = true;
+
+<% if (mode == "REAL_TIME") { %>
+
+  realTime = true;
+
+<% } %>
+
+<% if (mode == "FROM_FILE") { %>
+
+  realTime = false;
+
+  console.log("From file.");
+
+<% } %>
+
+
+
+map.on('load', function () {
+    // Add a source and layer displaying a point which will be animated in a circle.
+
+	<% missionPoints.forEach(function(point, index) { %>
+
+    //addMissionPoint(point[0],point[1]);
+
+    <% if (mode == "FROM_FILE") { %>
+
+      map.addSource('point<%= index %>', {
+            "type": "geojson",
+            "data": returnGeoJsonPoint(<%= point[1] %>,<%= point[0] %>)
+      });
+
+
+    	map.addLayer({
+        "id": "point<%= index %>",
+        "source": "point<%= index %>",
+        "type": "circle",
+        "paint": {
+            "circle-radius": radius,
+            "circle-color": color
+        }
+    	});
+
+	<% } %>
+
+	<% }); %>
+
+	geojsonData = {
+
+		"type": "Feature",
+			"properties": {},
+				"geometry": {
+					"type": "LineString",
+					"coordinates": [
+						<% missionPoints.forEach(function(point, index) { %>
+
+							[<%= point %>],
+
+						<% }); %>
+				]
+			}
+
+		};
+
+    <% if (mode == "FROM_FILE") { %>
+
+		geojson = geojsonData;
+
+      	console.log("Assign geojson to geojsonData. ");
+      	console.log(geojson);
+		
+	<% } %>
+
+		
+	mapLoaded = true;
+
+
+	 map.addLayer({
+        "id": "route",
+        "type": "line",
+        "source": {
+            "type": "geojson",
+            "data": geojson
+
+
+        },
+        "layout": {
+            "line-join": "round",
+            "line-cap": "round"
+        },
+        "paint": {
+            "line-color": color ,
+            "line-width": lineWidth
+        }
+    });
+
+
+});
+
+
+
+// REAL TIME MODE
+function addMissionPoint(x,y){
+
+	//var geojsonData;
+
+	console.log(geojson);
+
+	geojson.features[0].geometry.coordinates.push([x, y]);
+
+	var nbOfPoints = geojson.features[0].geometry.coordinates.length;
+
+
+	map.addSource('point'+nbOfPoints, {
+        "type": "geojson",
+        "data": returnGeoJsonPoint(x,y)
+    });
+
+		map.addLayer({
+			 "id": 'point'+nbOfPoints,
+			 "source": 'point'+nbOfPoints,
+			 "type": "circle",
+			 "paint": {
+					 "circle-radius": radius,
+					 "circle-color": color
+			 }
+	 });
+
+
+	map.getSource('route').setData(geojson);
+
+	map.flyTo({center:[x,y]});
+
+	//console.log("FLY TO " + x + " Y " + y);
+
+}
+
+// FAKE DATA
+function addPointRoutine(){
+
+	if(!mapLoaded)return;
+
+	console.log("ADD POINT TO ROUTINE");
+
+	var rdLat = <%= latitude %>;
+	var rdLon = <%= longitude %>;
+
+	var offset = 0.001;
+
+	var nLat = rdLat + Math.random() * offset;
+	var nLon = rdLon + Math.random() * offset;
+
+	addMissionPoint(nLon,nLat);
+
+}
+
+
+function returnGeoJsonPoint(x,y){
+
+	return {
+			 "type": "Point",
+			 "coordinates": [
+					x,y
+			 ]
+	 };
+
+
+}
+
+var fakeData = false;
+if(fakeData)setInterval(addPointRoutine, 3000);
+
+
+</script>

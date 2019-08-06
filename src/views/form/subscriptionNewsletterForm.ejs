@@ -1,0 +1,31 @@
+<div id="newsletterSubscriptionContainer">
+
+  <form id="newsletterSubscriptionForm" action='<%= baseUrl%>:<%=expressPort %>/newsletterSubscription' method='post' step=0>
+
+    <img src="/css/icon/removeIcon.png" id="newsletterSubscriptionRemove" class="removeIcon"/>
+
+    <center>
+    <p class="newsletterSubscriptionTitle"><em>Vous souhaitez vous inscrire à la newsletter du projet Beeyond ?</em></p>
+    </center>
+
+    <center><label for="nom" class="newsletterSubscriptionLabel">Nom : </label></center>
+    <center><input class="newsletterSubscriptionField" type="text" name="nom"></center>
+    </br>
+
+    <center><label for="prenom" class="newsletterSubscriptionLabel">Prénom : </label></center>
+    <center><input class="newsletterSubscriptionField" type="text" name="prenom"></center>
+    </br>
+
+    <center><label for="mail" class="newsletterSubscriptionLabel">Adresse mail : </label></center>
+    <center><input class="newsletterSubscriptionField" type="text" name="mail"></center>
+    </br>
+
+    <center><label for="company" class="newsletterSubscriptionLabel">Société : <em>(facultatif)</em></label></center>
+    <center><input class="newsletterSubscriptionField" type="text" name="company"></center>
+    </br>
+
+    <center><input class="newsletterSubscriptionSumbit"  type="submit" value="Inscription"></center>
+
+  </form>
+
+</div>

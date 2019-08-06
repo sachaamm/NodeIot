@@ -1,0 +1,255 @@
+<%- include("header.ejs"); %>
+
+    <body>
+	
+	<%- include("menu.ejs"); %>
+
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+
+		<div id="">
+
+        <form action='<%= baseUrl%>:<%=expressPort %>/createCaptation' id="sensorForm" method='post'>
+            
+			<h4>New captation: </h4>
+			<label for="captationName">Captation Name : </label></br>
+			<input name="captationName" id="captationName" type="text" placeholder="Ex: DHT11 Captation">
+			</br>
+			
+			
+			<div id="sensorsDiv">
+			
+			<label for="sensor">Sensor : </label></br>
+			
+			<select class="sensor" name="sensor0" id="sensor0">
+				
+				<% sensors.forEach(function(sensor, index) { %>
+		
+				<option value="<%= sensor %>"><%= sensor %></option>
+				
+				<% }); %>
+				
+			
+			</select>
+			</br>
+			
+			</div>
+			
+			
+			<label for="numberOfSensors">Number of sensors : </label></br>
+			<input name="numberOfSensors" type="number" value=1 min=1 max=10>
+			</br>
+			
+			
+			
+			<label for="numberOfValues">Protocol : </label></br>
+			
+			
+			
+			<select name="protocol" id="protocol">
+				
+				<% protocols.forEach(function(protocol, index) { %>
+		
+					<option value="<%= protocol %>"><%= protocol %></option>
+				
+				<% }); %>
+				
+			</select>
+			
+			
+				
+			</br>
+			
+			<div id="portDiv">
+			
+			<label for="port">Port : </label></br>
+			<input id="port" name="port" type="text" placeholder="Ex: COM5 / 8888 etc">
+			</br>
+			
+			</div>
+			
+
+			</br>
+			</br>
+			
+			<div id="baudrateDiv">
+			
+			<label for="additionalInfo">Baudrate : </label></br>
+			<input id="additionalInfo" name="additionalInfo" type="text" placeholder="Ex: 115200 etc">
+			</br>
+			
+			</div>
+			
+
+			</br>
+			</br>
+	
+	
+			
+			<textarea style="display:none" id="content"  name="sensorsNames">
+			
+				
+			
+			</textarea>
+			
+			
+			<a onclick="submitForm()" style="position:absolute;top:20%;left:30%" type='submit'>Start !</a>
+			 
+        </form>	
+		
+		</div>
+		
+		
+		
+		
+		
+		
+		<script>
+		
+			var nbOfSensors = 1;
+			
+			
+			$("select[name*='protocol']").change(function(){
+		
+				var protocol = $(this).val();
+				
+				if(protocol == 'Serial'){
+				
+					setVisibility($("#baudrateDiv"),true);
+				
+				}else{
+				
+					setVisibility($("#baudrateDiv"),false);
+				
+				}
+				
+				
+				if(isPortRequiredProtocol(protocol)){
+				
+					setVisibility($("#portDiv"),true);
+				
+				}else{
+				
+					setVisibility($("#portDiv"),false);
+					
+				}
+		
+			});
+			
+			function setVisibility(element,state){
+			
+				if(state == false)element.css("display","none");
+				if(state == true)element.css("display","inline");
+			
+			}
+		
+			function isPortRequiredProtocol(protocol){
+			
+				if(protocol == 'UDP' || protocol == 'Serial')return true;
+			
+				return false;
+			}
+		
+			$("input[name*='numberOfSensors']").change(function(){
+		
+				if(nbOfSensors < $("input[name*='numberOfSensors']").val()){
+		
+					<!-- alert("ADD"); -->
+					addSensor();
+				}
+		
+				/*
+				if(nbOfSensors > $("input[name*='numberOfSensors']").val()){
+		
+					//alert("REMOVE LAST");
+			
+				}
+				*/
+		
+			nbOfSensors = $("input[name*='numberOfSensors']").val();
+	
+	
+			});
+		
+			function addSensor(){
+	
+	
+				var newValueId = $(".sensor").length;
+				var newValue=''+
+				'<select class="sensor" name="sensor'+newValueId+'" id="sensor'+newValueId+'">'+
+				
+				<% sensors.forEach(function(sensor, index) { %>
+		
+				'<option value="<%= sensor %>"><%= sensor %></option>'+
+				
+				<% }); %>
+				'</select></br>';
+			
+	
+				$("#sensorsDiv").append(newValue);
+		
+			}
+			
+			function submitForm(){
+		
+				var sensorsNames = [];
+					
+				var delimiterA = ">>";
+				var delimiterB = "##";
+				var validInput = true;
+				
+				var protocol = $("#protocol").val();
+				var portName = $("#port").val();
+				var captationName = $("#captationName").val();
+				
+				if(captationName.length == 0){
+					
+					validInput = false;
+					alert("You must specify a name for your captation !");
+				
+				}
+				
+				if(isPortRequiredProtocol(protocol) && portName.length == 0){
+				
+					validInput = false;
+					alert("You must specify a port name with this protocol ! ("+protocol+")");
+				}
+				
+				
+				
+				
+				if(!validInput)return;
+		
+				$(".sensor").each(function (){
+					
+					sensorsNames.push($(this).val());
+				
+				});
+		
+		
+				
+				var contentString = "";
+		
+				for(var i = 0 ; i < sensorsNames.length ; i++){
+		
+					contentString += sensorsNames[i] + delimiterB;
+		
+				}
+				
+		
+				$("#content").val( contentString );	
+		
+				if(validInput)$("#sensorForm").submit();
+		
+		
+			}
+		
+		
+		
+		</script>
+		
+		
+	</body>
+	
+	

@@ -1,0 +1,15 @@
+
+.mapBlock{
+
+	position:absolute;
+	top:20%;
+	left:65%;
+	width:50%;
+
+}
+
+#map{
+
+	position:absolute; top:20%; bottom:0; width:30%; height:50%;
+
+}

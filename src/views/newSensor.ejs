@@ -1,0 +1,261 @@
+<%- include("header.ejs"); %>
+
+    <body>
+
+<%- include("menu.ejs"); %>
+
+
+	<div class="centralDiv">
+
+
+
+
+
+    <form action='<%= baseUrl%>:<%=expressPort %>/insertSensor' id="sensorForm" method='post'>
+
+			<h4>New captation template</h4>
+			<label for="sensorName">Device Name : </label></br>
+			<input name="sensorName" type="text" placeholder="Ex: DHT11 sensor">
+			</br>
+
+			<label for="colorPalette">Color palette for captation : </label></br>
+			<select name="colorPalette" id="colorPalette">
+
+				<% palettes.forEach(function(rickshawPalette, index) { %>
+
+				<option value="<%= rickshawPalette %>"><%= rickshawPalette %></option>
+
+				<% }); %>
+
+
+			</select>
+			</br>
+
+			<label for="numberOfValues">Number of values : </label></br>
+			<input name="numberOfValues" type="number" value=1 min=1 max=10>
+			</br>
+
+
+			<div id="value0">
+
+			<label for="valueName0">Value Name : </label></br>
+			<input class="valueInput" name="valueName0" type="text" placeholder="Ex: Temperature">
+			</br>
+
+
+			<label for="unitValue0">Unit for value: </label></br>
+			<input class="unitInput" name="unitValue0" type="text" placeholder="Ex: °C">
+			</br>
+
+			<label for="unitType0">Type of value: </label></br>
+			<select class="typeInput" name="unitType0" >
+
+				<% valuesTypes.forEach(function(valueType, index) { %>
+
+				<option value="<%= valueType %>"><%= valueType %></option>
+
+				<% }); %>
+
+			</select>
+			</br>
+
+
+			</br>
+			</div>
+
+			<textarea style="display:none"id="content"  name="sensorValuesAndUnits">
+
+
+
+			</textarea>
+
+
+			<a onclick="submitForm()" class="submitLink" style="position:fixed;top:40%;left:40%" type='submit'>Create !</a>
+
+        </form>
+
+
+
+
+		</div>
+	</body>
+
+
+
+	<script>
+
+
+	// BUILD PALETTE COLOR DIV
+	var nbOfColors = 10;
+
+	var dwP = 1; // div width percent
+	var dhP = 2.5; // div height percent
+	var dtP = 48; // div top percent
+	var dlP = 40; // div left percent
+
+
+
+	$("#colorPalette").change(function(){
+
+		$(".paletteColorDiv").remove();
+
+		buildPaletteDivs();
+
+
+	});
+
+
+	buildPaletteDivs();
+
+	function buildPaletteDivs(){
+
+		var schemePalette = $("#colorPalette").val();
+
+		var palette = new Rickshaw.Color.Palette( { scheme: schemePalette } );
+
+
+		for(var i = 0; i < nbOfColors ; i++){
+
+			var posX = dlP + dwP * i;
+			var paletteDiv = "<div class='paletteColorDiv' style='position:absolute;width:"+dwP+"%;height:"+dhP+"%;top:"+dtP+"%;left:"+posX+"%;background-color:"+palette.color(i)+"'></div>";
+			$("body").append(paletteDiv);
+
+		}
+
+
+
+	}
+
+
+	// UPDATE NUMBER OF VALUES IN FORM
+
+	var nbOfValuesInForm = 1;
+
+	$("input[name*='numberOfValues']").change(function(){
+
+		if(nbOfValuesInForm < $("input[name*='numberOfValues']").val()){
+
+			<!-- alert("ADD"); -->
+			addValue();
+		}
+
+		if(nbOfValuesInForm > $("input[name*='numberOfValues']").val()){
+
+			alert("REMOVE LAST");
+
+		}
+
+		nbOfValuesInForm = $("input[name*='numberOfValues']").val();
+
+
+	});
+
+
+	function addValue(){
+
+
+		var newValueId = $(".valueInput").length;
+		var newValue='<div id="value'+newValueId+'">'+
+		'<label for="valueName'+newValueId+'">Value Name : </label></br>'+
+		'<input class="valueInput" name="valueName'+newValueId+
+		'" type="text" placeholder="Ex: Temperature"></br>'+
+		'<label for="unitValue'+newValueId+'">Unit for value: </label></br>'+
+		'<input class="unitInput" name="unitValue'+newValueId+'" type="text" placeholder="Ex: °C"></br>'+
+		'<label for="unitType'+newValueId+'">Type of value: </label></br>'+
+		'<select class="typeInput" name="unitType'+newValueId+'" >'+
+
+		<% valuesTypes.forEach(function(valueType, index) { %>
+
+			'<option value="<%= valueType %>"><%= valueType %></option>'+
+
+		<% }); %>
+
+		'</select></br></br></div>';
+
+
+
+
+
+
+		//alert(	$(".valueInput").length );
+
+		$("#sensorForm").append(newValue);
+
+	}
+
+
+	function removeValueInForm(index){
+
+
+
+	}
+
+	function submitForm(){
+
+		var valueNames = [];
+		var unitNames = [];
+		var valueTypes = [];
+
+
+
+		var delimiterA = ">>";
+		var delimiterB = "##";
+		var validInput = true;
+
+		$(".valueInput").each(function (){
+
+			var valueInput = $(this).val();
+
+			if(valueInput.length == 0){
+				alert("Error ! You must enter input to proceed");
+				validInput = false;
+			}
+
+			valueNames.push(valueInput);
+
+
+		});
+
+		$(".unitInput").each(function (){
+
+			var unitInput = $(this).val();
+
+			unitNames.push(unitInput);
+
+		});
+
+		$(".typeInput").each(function (){
+
+			var typeInput = $(this).val();
+
+			valueTypes.push(typeInput);
+
+		});
+
+
+
+		var contentString = "";
+
+		for(var i = 0 ; i < unitNames.length ; i++){
+
+			contentString += valueNames[i] + delimiterA + unitNames[i] + delimiterA + valueTypes[i] + delimiterB;
+
+		}
+
+		//console.log("Content String " + contentString);
+
+		$("#content").val( contentString );
+
+		if(validInput)$("#sensorForm").submit();
+
+
+	}
+
+
+
+	</script>
+
+
+
+
+</html>

@@ -1,0 +1,29 @@
+<div id="archiveFormContainer">
+
+  <form id="archiveForm" method="post" action='<%= baseUrl%>:<%=expressPort %>/archive' method='post' enctype="multipart/form-data" step=0>
+
+    <img src="/css/icon/removeIcon.png" id="archiveFormRemove" class="removeIcon"/>
+
+    <center>
+    <p class="newsletterSubscriptionTitle"><em>Archive</em></p>
+    </center>
+
+    <center><label for="titre" class="newsletterSubscriptionLabel">Titre : </label></center>
+    <center><input class="newsletterSubscriptionField" type="text" name="titre"></center>
+    </br>
+
+    <center><label for="description" class="newsletterSubscriptionLabel">Description : </label></center>
+    <center><textarea class="newsletterSubscriptionField" style="width:60%" type="password" name="description"></textarea></center>
+    </br>
+
+    <center><label for="fichier" class="newsletterSubscriptionLabel">Fichier : </label>
+
+    <input class="" type="file" name="fichier"/></center>
+    </br>
+
+
+    <center><input class="newsletterSubscriptionSumbit"  type="submit" value="Connexion"></center>
+
+  </form>
+
+</div>
