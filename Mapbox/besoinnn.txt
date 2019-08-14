@@ -1,4 +1,0 @@
-LIST A FAIRE POUR BEEYOND:
-
-PM2.5 PWM >> ESP : level shifter
-RS232 >> ESP : level shifter

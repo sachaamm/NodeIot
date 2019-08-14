@@ -1,4 +1,0 @@
-MAPBOX:
-
-un affichage avec un parcours de point geo-localises
-
