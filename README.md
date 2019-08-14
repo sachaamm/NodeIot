@@ -2,7 +2,8 @@
 A repository for IoT with Node.js and React Native
 
 ## A Work in progress... ##
-</br>
+
+
 ## Todo ##
 
 * Wiki 
