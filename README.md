@@ -5,9 +5,9 @@ A repository for IoT with Node.js and React Native
 
 ## A repository organized in 3 directories ##
 
-* **Arduino/** directory is containing the files for the IoT part 
-* **NodeJS-Beeyond/** directory is containing the files for the NodeJS server, interacting with IoT devices
-* **ReactNative/** directory is containing the files for the mobile application, developped on ReactNative + native parts in Android 
+* **Arduino/** directory is containing the files for the IoT part (C)
+* **NodeJS-Beeyond/** directory is containing the files for the NodeJS server, interacting with IoT devices (Javascript)
+* **ReactNative/** directory is containing the files for the mobile application, developped on ReactNative + native parts in Android (Java)
 
 ## Todo ##
 
