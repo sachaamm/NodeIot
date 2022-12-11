@@ -8,7 +8,7 @@
         "dgram": "^1.0.1",
         "ejs": "^2.6.1",
         "exec": "^0.2.1",
-        "express": "^4.17.1",
+        "express": "^4.17.3",
         "express-fileupload": "^1.1.4",
         "json2csv": "^4.5.1",
         "mysql": "^2.17.1",
